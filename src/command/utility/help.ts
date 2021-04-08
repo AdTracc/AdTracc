@@ -1,10 +1,10 @@
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { PrefixSupplier } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
 
-export default class HelpCommand extends MinehutCommand {
+export default class HelpCommand extends TraccCommand {
 	constructor() {
 		super('help', {
 			aliases: ['help'],

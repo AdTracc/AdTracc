@@ -6,4 +6,4 @@ interface CustomOptions {
 	enforcePermissionLevelRole?: boolean;
 }
 
-export type MinehutCommandOptions = CustomOptions & CommandOptions;
+export type TraccCommandOptions = CustomOptions & CommandOptions;

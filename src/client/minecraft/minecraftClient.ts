@@ -23,10 +23,12 @@ export default class MinecraftClient {
     async registerEvents() {
         const eventFiles = readdirSync(__dirname+'/events/').filter(file => file.endsWith('.ts'));
         for (const file of eventFiles) {
-            const name = file as keyof BotEvents;
             const event = await import(`${__dirname}/events/${file}`);
+            console.log(event)
+            // const event = new Event();
+            const name = file.replace('.ts', '') as keyof BotEvents;
             this.client?.on(name, (...args: any) => {
-                event.execute(...args);
+                new event.default().execute(...args);
             })
         }
     }
@@ -34,6 +36,7 @@ export default class MinecraftClient {
 
     start() {
         this.client = mineflayer.createBot({
+            //@ts-ignore
             host: this.host,
             username: this.username,
             password: this.password,

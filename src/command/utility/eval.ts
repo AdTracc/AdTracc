@@ -1,10 +1,10 @@
 import { Message } from 'discord.js';
 import { inspect } from 'util';
 import { PrefixSupplier } from 'discord-akairo';
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 import { MESSAGES } from '../../util/constants';
 
-export default class EvalCommand extends MinehutCommand {
+export default class EvalCommand extends TraccCommand {
 	constructor() {
 		super('eval', {
 			aliases: ['eval'],

@@ -36,7 +36,7 @@ export class TraccClient extends AkairoClient {
 		// this.mongo = options.mongo;
 
 		this.commandHandler = new CommandHandler(this, {
-			directory: '../src/command/',
+			directory: './src/command/',
 			prefix: (msg: Message) => {
 				if (!msg.guild) return options.prefix!;
 				const config = guildConfigs.get(msg.guild.id);
@@ -44,9 +44,9 @@ export class TraccClient extends AkairoClient {
 			},
 			argumentDefaults: {
 				prompt: {
-					modifyRetry: (_, str) =>
+					modifyRetry: (_: any, str: any) =>
 						MESSAGES.commandHandler.prompt.modifyRetry(str),
-					modifyStart: (_, str) =>
+					modifyStart: (_: any, str: any) =>
 						MESSAGES.commandHandler.prompt.modifyStart(str),
 					timeout: MESSAGES.commandHandler.prompt.timeout,
 					ended: MESSAGES.commandHandler.prompt.ended,
@@ -60,11 +60,11 @@ export class TraccClient extends AkairoClient {
 		});
 
 		this.listenerHandler = new ListenerHandler(this, {
-			directory: '../src/listener/',
+			directory: './src/listener/',
 		});
 
 		this.inhibitorHandler = new InhibitorHandler(this, {
-			directory: '../src/inhibitor/',
+			directory: './src/inhibitor/',
 		});
 
 		this.listenerHandler.setEmitters({
@@ -87,7 +87,7 @@ export class TraccClient extends AkairoClient {
 	}
 
 	registerArgTypes() {
-		this.commandHandler.resolver.addType('handler', (_msg: Message, phrase) => {
+		this.commandHandler.resolver.addType('handler', (_msg: Message, phrase: any) => {
 			if (!phrase) return null;
 			switch (phrase.toLowerCase()) {
 				case 'cmd':

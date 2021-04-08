@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 
-export default class PingCommand extends MinehutCommand {
+export default class PingCommand extends TraccCommand {
 	constructor() {
 		super('ping', {
 			aliases: ['ping'],

@@ -1,9 +1,9 @@
 import { Message } from 'discord.js';
 import { getPermissionLevel } from '../../util/permission/getPermissionLevel';
 import { PermissionLevel } from '../../util/permission/permissionLevel';
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 
-export default class PingCommand extends MinehutCommand {
+export default class PingCommand extends TraccCommand {
 	constructor() {
 		super('myLevel', {
 			aliases: ['mylevel'],

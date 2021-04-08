@@ -5,11 +5,11 @@ import {
 	ListenerHandler,
 } from 'discord-akairo';
 import { PrefixSupplier } from 'discord-akairo';
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 import { PermissionLevel } from '../../util/permission/permissionLevel';
 import { MESSAGES } from '../../util/constants';
 
-export default class ReloadCommand extends MinehutCommand {
+export default class ReloadCommand extends TraccCommand {
 	constructor() {
 		super('reload', {
 			aliases: ['reload'],

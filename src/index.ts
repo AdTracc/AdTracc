@@ -2,7 +2,8 @@ import { TraccClient } from './client/discord/traccClient';
 // import { mongoose } from '@typegoose/typegoose';
 import MinecraftClient from './client/minecraft/minecraftClient';
 
-require('dotenv').config({ path: '../.env' });
+// { path: '../.env' }
+require('dotenv').config();
 
 // TODO: validate env variables
 (async () => {

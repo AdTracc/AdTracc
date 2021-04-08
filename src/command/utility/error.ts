@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
-import { MinehutCommand } from '../../structure/command/minehutCommand';
+import { TraccCommand } from '../../structure/command/traccCommand';
 
-export default class ErrorCommand extends MinehutCommand {
+export default class ErrorCommand extends TraccCommand {
 	constructor() {
 		super('error', {
 			aliases: ['error'],
