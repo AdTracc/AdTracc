@@ -1,0 +1,17 @@
+{
+  "name": "AdTracc",
+  "version": "0.1.0",
+  "description": "Discord bot to manage setup of minehut advertisement tracker",
+  "main": "index.ts",
+  "author": "Azuyamat, nicholxs, Spiderlogical and aVinixs",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@typegoose/typegoose": "^7.6.0",
+    "discord-akairo": "^8.1.0",
+    "discord.js": "^12.5.3",
+    "dotenv": "^8.2.0",
+    "mineflayer": "^3.6.0",
+    "mongoose": "^5.12.3"
+  }
+}
