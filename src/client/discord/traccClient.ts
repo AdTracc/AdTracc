@@ -1,6 +1,6 @@
 import { AkairoClient, CommandHandler, ListenerHandler } from 'discord-akairo';
 import { TraccClientOptions } from './traccClientOptions';
-// import { Mongoose } from 'mongoose';
+import { Mongoose } from 'mongoose';
 import { Message } from 'discord.js';
 import { InhibitorHandler } from 'discord-akairo';
 import { guildConfigs } from '../../guild/config/guildConfigs';
@@ -9,6 +9,7 @@ import { guildConfigs } from '../../guild/config/guildConfigs';
 import TraccClientEvents from './traccClientEvents';
 
 import { MESSAGES } from '../../util/constants';
+import { CodeModel } from '../../model/code';
 // import { CacheManager } from '../structure/cacheManager';
 
 
@@ -18,7 +19,7 @@ export class TraccClient extends AkairoClient {
 	inhibitorHandler: InhibitorHandler;
 
 	ownerIds: string[] | undefined;
-	// mongo?: Mongoose;
+	mongo?: Mongoose;
 
 	constructor(options: TraccClientOptions) {
 		// TODO: validate options
@@ -33,7 +34,7 @@ export class TraccClient extends AkairoClient {
 		);
 
 		this.ownerIds = options.ownerIds;
-		// this.mongo = options.mongo;
+		this.mongo = options.mongo;
 
 		this.commandHandler = new CommandHandler(this, {
 			directory: './src/command/',
@@ -107,6 +108,17 @@ export class TraccClient extends AkairoClient {
 					return null;
 			}
 		});
+
+		this.commandHandler.resolver.addType(
+			'activationCode',
+			async (_msg: Message, phrase) => {
+				if (!phrase) return null;
+
+				const c = await CodeModel.findOne({ _id: phrase });
+				if (!c) return null;
+				return c;
+			}
+		);
 	}
 }
 

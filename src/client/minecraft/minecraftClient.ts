@@ -24,8 +24,6 @@ export default class MinecraftClient {
         const eventFiles = readdirSync(__dirname+'/events/').filter(file => file.endsWith('.ts'));
         for (const file of eventFiles) {
             const event = await import(`${__dirname}/events/${file}`);
-            console.log(event)
-            // const event = new Event();
             const name = file.replace('.ts', '') as keyof BotEvents;
             this.client?.on(name, (...args: any) => {
                 new event.default().execute(...args);

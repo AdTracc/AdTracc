@@ -1,14 +1,14 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { MinehutCommandOptions } from './minehutCommandOptions';
+import { TraccCommandOptions } from './traccCommandOptions';
 import { PermissionLevel } from '../../util/permission/permissionLevel';
 import { getPermissionLevel } from '../../util/permission/getPermissionLevel';
 import { hasPermissionLevelRole } from '../../util/permission/hasPermissionLevelRole';
 
-export class MinehutCommand extends Command {
+export class TraccCommand extends Command {
 	permissionLevel: PermissionLevel;
 
-	constructor(id: string, options?: MinehutCommandOptions) {
+	constructor(id: string, options?: TraccCommandOptions) {
 		super(id, options);
 
 		this.permissionLevel = options?.permissionLevel || PermissionLevel.Everyone;
