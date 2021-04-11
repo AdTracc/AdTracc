@@ -10,6 +10,8 @@ import TraccClientEvents from './traccClientEvents';
 
 import { MESSAGES } from '../../util/constants';
 import { CodeModel } from '../../model/code';
+import mineflayer from 'mineflayer';
+import { EventEmitter } from 'events';
 // import { CacheManager } from '../structure/cacheManager';
 
 
@@ -20,6 +22,7 @@ export class TraccClient extends AkairoClient {
 
 	ownerIds: string[] | undefined;
 	mongo?: Mongoose;
+	mcBot?: mineflayer.Bot;
 
 	constructor(options: TraccClientOptions) {
 		// TODO: validate options
@@ -35,6 +38,7 @@ export class TraccClient extends AkairoClient {
 
 		this.ownerIds = options.ownerIds;
 		this.mongo = options.mongo;
+		this.mcBot = options.mcBot;
 
 		this.commandHandler = new CommandHandler(this, {
 			directory: './src/command/',
@@ -71,6 +75,7 @@ export class TraccClient extends AkairoClient {
 		this.listenerHandler.setEmitters({
 			commandHandler: this.commandHandler,
 			listenerHandler: this.listenerHandler,
+			minecraft: this.mcBot as EventEmitter
 		});
 
 		this.commandHandler.useListenerHandler(this.listenerHandler);
@@ -128,6 +133,7 @@ declare module 'discord-akairo' {
 		listenerHandler: ListenerHandler;
 		inhibitorHandler: InhibitorHandler;
 		ownerIds: string[] | undefined;
+		mcBot?: mineflayer.Bot;
 
 		start(token: string): void;
 		registerArgTypes(): void;

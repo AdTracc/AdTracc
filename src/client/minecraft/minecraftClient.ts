@@ -1,6 +1,5 @@
 import { MinecraftClientOptions } from "./minecraftClientOptions";
-import { readdirSync } from 'fs';
-import mineflayer, { BotEvents } from 'mineflayer';
+import mineflayer from 'mineflayer';
 
 export default class MinecraftClient {
 
@@ -17,24 +16,28 @@ export default class MinecraftClient {
         this.password = options.password;
         this.version = options.version;
         this.auth = options.auth;
+        this.client;
     }
 
+    
+    /*
+    Moved events to listener folder, aswell as using the built in handler with discord-akairo
+    */
 
-    async registerEvents() {
-        const eventFiles = readdirSync(__dirname+'/events/').filter(file => file.endsWith('.ts'));
-        for (const file of eventFiles) {
-            const event = await import(`${__dirname}/events/${file}`);
-            const name = file.replace('.ts', '') as keyof BotEvents;
-            this.client?.on(name, (...args: any) => {
-                new event.default().execute(...args);
-            })
-        }
-    }
+    // async registerEvents() {
+    //     const eventFiles = readdirSync(__dirname+'/events/').filter(file => file.endsWith('.ts'));
+    //     for (const file of eventFiles) {
+    //         const event = await import(`${__dirname}/events/${file}`);
+    //         const name = file.replace('.ts', '') as keyof BotEvents;
+    //         this.client?.on(name, (...args: any) => {
+    //             new event.default().execute(...args);
+    //         })
+    //     }
+    // }
 
 
     start() {
         this.client = mineflayer.createBot({
-            //@ts-ignore
             host: this.host,
             username: this.username,
             password: this.password,
@@ -43,7 +46,7 @@ export default class MinecraftClient {
         })
 
 		// bind events
-        this.registerEvents();
+        // this.registerEvents();
     }
 
 }
