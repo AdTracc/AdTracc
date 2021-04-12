@@ -45,6 +45,8 @@ export default class MinecraftClient {
             auth: this.auth
         })
 
+        this.client.addChatPattern('ad', /^\[AD\]( \[.+\])* (\S+): \/join ([^\s]*) (.+)/, {repeat: true, parse: true})
+
 		// bind events
         // this.registerEvents();
     }
