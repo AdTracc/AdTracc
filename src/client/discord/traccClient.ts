@@ -12,7 +12,9 @@ import { MESSAGES } from '../../util/constants';
 import { CodeModel } from '../../model/code';
 import mineflayer from 'mineflayer';
 import { EventEmitter } from 'events';
-// import { CacheManager } from '../structure/cacheManager';
+import { DocumentType } from '@typegoose/typegoose';
+import { Server } from '../../model/server';
+import { CacheManager } from '../../structure/cacheManager';
 
 
 export class TraccClient extends AkairoClient {
@@ -23,6 +25,8 @@ export class TraccClient extends AkairoClient {
 	ownerIds: string[] | undefined;
 	mongo?: Mongoose;
 	mcBot?: mineflayer.Bot;
+
+	serverCacheManager: CacheManager<string, DocumentType<Server>>;
 
 	constructor(options: TraccClientOptions) {
 		// TODO: validate options
@@ -85,6 +89,8 @@ export class TraccClient extends AkairoClient {
 		this.commandHandler.loadAll();
 		// this.inhibitorHandler.loadAll();
 
+		this.serverCacheManager = new CacheManager(600000);
+
 		this.registerArgTypes();
 	}
 
@@ -134,6 +140,8 @@ declare module 'discord-akairo' {
 		inhibitorHandler: InhibitorHandler;
 		ownerIds: string[] | undefined;
 		mcBot?: mineflayer.Bot;
+
+		serverCacheManager: CacheManager<string, DocumentType<Server>>;
 
 		start(token: string): void;
 		registerArgTypes(): void;

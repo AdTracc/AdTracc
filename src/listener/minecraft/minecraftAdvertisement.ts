@@ -2,6 +2,7 @@ import { Listener } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
 import { TextChannel } from 'discord.js';
 import { ChatMessage } from 'mineflayer';
+import { ServerModel } from '../../model/server';
 
 export default class MinecraftAdvertisementListener extends Listener {
 	constructor() {
@@ -30,6 +31,14 @@ export default class MinecraftAdvertisementListener extends Listener {
         .setTimestamp()
         .setAuthor(this.client.user?.username, this.client.user?.displayAvatarURL());
 
-        channel.send(embed);
+        channel.send(embed).catch(e => { return e;});
+
+		const linkedServers = await ServerModel.find({minecraftServerName: serverName});
+		if (linkedServers) {
+			for (let server of linkedServers) {
+				const channel = this.client.channels.cache.get(server.channelID) as TextChannel;
+				channel.send(embed)
+			}
+		}
 	}
 }

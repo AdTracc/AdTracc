@@ -29,7 +29,12 @@ export default class GenerateCommand extends TraccCommand {
 	}
 
 	async exec(msg: Message, { customer }: { customer: User }) {
-		const generatedCode = randomAlphanumericString(5);
+		let generatedCode = randomAlphanumericString(5);
+		if (await CodeModel.exists({_id: generatedCode})) {
+			while (await CodeModel.exists({_id: generatedCode})) {
+				generatedCode = randomAlphanumericString(5);
+			}
+		}
 		if (await CodeModel.exists({owner: customer.id})) return msg.channel.send(`This user already has a code!`);
 		
 		await CodeModel.create({

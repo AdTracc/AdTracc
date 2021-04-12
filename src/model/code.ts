@@ -8,7 +8,8 @@ export class Code {
     owner!: string;
 
     @prop({required: false, type: String})
-    guilds!: string[] 
+    guilds!: string[]
+
 }
 
 export const CodeModel = getModelForClass(Code);

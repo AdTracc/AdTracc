@@ -34,8 +34,10 @@ export default class ActivateCommand extends TraccCommand {
 			msg.channel.send(`${msg.guild.name} already has Ad-Tracc enabled!`);
 		}
 
+		let guilds = code.guilds;
+		guilds.push(msg.guild.id);
 		code = await code.updateOne({
-			guilds: code.guilds.push(msg.guild.id)
+			guilds
 		}).catch((e: Error) => {
 			msg.channel.send(`An error occured while saving your data, contact an administrator`);
 			console.error(e);

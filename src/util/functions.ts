@@ -1,4 +1,6 @@
 import { Message, Util } from 'discord.js';
+import { TraccClient } from '../client/discord/traccClient';
+import { ServerModel } from '../model/server';
 
 // Thanks to https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
 export function randomAlphanumericString(length: number) {
@@ -26,4 +28,20 @@ export function arrayDiff<T>(aArray: T[], bArray: T[]) {
 		added,
 		removed,
 	};
+}
+
+export async function getServers(client: TraccClient, name: string) {
+	if (client.serverCacheManager.isInCache(name)) {
+		return client.serverCacheManager.getValue(name);
+	}
+	else {
+		const server = await ServerModel.findOne({minecraftServerName: name});
+		if (server) {
+			client.serverCacheManager.addValue(name, server);
+			return server;
+		}
+		return null;
+	}
+
+
 }
