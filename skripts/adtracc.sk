@@ -124,7 +124,7 @@ command /adtracc [<string>]:
             play sound "entity.villager.no" to player
         else:
             arg-1 is "help":
-                {_p} has permission "{@admin_perms}":
+                player has permission "{@admin_perms}":
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     send "" to player
                     send centered "&6&lADTRACC &7v1.0.0" to player
@@ -139,7 +139,7 @@ command /adtracc [<string>]:
                 send "%nl% &7Default &8» &e%{data::adtracc::count-default}% %nl% &aVIP &8» &e%{data::adtracc::count-vip}% %nl% &bPRO &8» &e%{data::adtracc::count-pro}% %nl% &6LEGEND &8» &e%{data::adtracc::count-legend}% %nl% &3PATRON &8» &e%{data::adtracc::count-patron}% %nl% &dARTIST &8» &e%{data::adtracc::count-artist}% %nl% &dBUILDER &8» &e%{data::adtracc::count-builder}% %nl% &dYOUTUBE &8» &e%{data::adtracc::count-youtube}% %nl% &9HELPER &8» &e%{data::adtracc::count-helper}% %nl% &eMOD &8» &e%{data::adtracc::count-mod}% %nl% &6SRMOD &8» &e%{data::adtracc::count-srmod}% %nl% &cADMIN &8» &e%{data::adtracc::count-admin}% %nl%" to player
                 send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
             arg-1 is "toggle":
-                {_p} has permission "{@admin_perms}":
+                player has permission "{@admin_perms}":
                     {data::adtracc:message_toggle} is true:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send centered "&6&lDISABLED MESSAGES" to player
@@ -158,7 +158,7 @@ command /adtracc [<string>]:
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     play sound "entity.villager.no" to player
             arg-1 is "disable":
-                {_p} has permission "{@admin_perms}":
+                player has permission "{@admin_perms}":
                     {data::adtracc:disable} is true:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send centered "&6&lDISABLED ADTRACC" to player
