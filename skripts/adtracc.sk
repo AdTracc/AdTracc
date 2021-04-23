@@ -43,12 +43,13 @@ on guild message received seen by "{@bot_name}":
     set {_split_ad::*} to split {_ad} at "|&|"
     set {_player} to {_split_ad::3}
     set {_rank} to ("%{_split_ad::2}%") if {_split_ad::1} != "undefined" else ("Default")
-    send "{@server_prefix} {@server_color_primary}%{_player}% {@server_color_secondary}has advertised the server and was rewarded!" to all players if {data::adtracc::toggle} is true
+    send "{@server_prefix} {@server_color_primary}%{_player}% {@server_color_secondary} advertised the server and was rewarded! &7(%{data::adtracc::%{_u}%} ? 0% &7Ads)" to all players if {data::adtracc::toggle} is true
     play sound "entity.villager.levelup" at pitch 2 to all players if {@server_sound_enabled} is true
     adReward({_player}, {_rank})
 
 function adReward(p: player, rank: string):
     set {_u} to uuid of {_p}
+    add 1 to {data::adtracc::%{_u}%}
 
     # ALWAYS RUNS
 
@@ -122,7 +123,7 @@ command /adtracc [<string>] [<string>]:
                     arg-1 is "help":
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send "" to player
-                        send centered "&6&lADTRACC &7v1.0" to player
+                        send centered "&6&lADTRACC &7v1.0.0" to player
                         send "" to player
                         send " &f/adtracc stats - &7&oDisplays statistics for advertisements%nl% &f/adtracc toggle - &7&oToggles the broadcasts for advertisements%nl% &f/adtracc disable - &7&oTemporarily disable adtracc features%nl% &f/adtracc help - &7&oDisplays a list of commands for adtracc" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
