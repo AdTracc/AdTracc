@@ -15,7 +15,7 @@ export default class ReadyListener extends Listener {
 		const servers = await ServerModel.find();
 
 		servers.map(server => {
-			this.client.serverCacheManager.addValue(server.minecraftServerName, server)
+			this.client.serverNameCache.push(server.minecraftServerName)
 		})
 	}
 }

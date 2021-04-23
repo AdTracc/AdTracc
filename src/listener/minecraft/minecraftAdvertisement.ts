@@ -1,8 +1,8 @@
+import { mongoose } from '@typegoose/typegoose';
 import { Listener } from 'discord-akairo';
-import { MessageEmbed } from 'discord.js';
-import { TextChannel } from 'discord.js';
-import { ChatMessage } from 'mineflayer';
+import { MessageEmbed, TextChannel } from 'discord.js';
 import { ServerModel } from '../../model/server';
+import { ServerStatModel } from '../../model/serverstats';
 
 export default class MinecraftAdvertisementListener extends Listener {
 	constructor() {
@@ -12,15 +12,12 @@ export default class MinecraftAdvertisementListener extends Listener {
 		});
 	}
 
-	async exec(message: ChatMessage) {
-		const channel = this.client.channels.cache.get('829551447774724166') as TextChannel;
-
-        let ad = message.toString().split(',');
-
-        const adRank = ad[0] || 'Default'
-		const advertiser = ad[1]
-		const serverName = ad[2]
-		const adMessage = ad[3]
+	async exec(ad: RegExpMatchArray) {
+		const channel = await this.client.channels.fetch('829551447774724166') as TextChannel; //#miunehut-chat in bot category
+        const adRank = ad[0][0] || 'Default'
+		const advertiser = ad[0][1]
+		const serverName = ad[0][2]
+		const adMessage = ad[0][3]
 
         const embed = new MessageEmbed()
         .addField('**Rank:**', `${adRank}`, true)
@@ -31,13 +28,51 @@ export default class MinecraftAdvertisementListener extends Listener {
         .setTimestamp()
         .setAuthor(this.client.user?.username, this.client.user?.displayAvatarURL());
 
-        channel.send(embed).catch(e => { return e;});
+		channel.send(embed).catch(e => console.log(e));
+
+		if (!this.client.serverNameCache.includes(serverName)) return;
 
 		const linkedServers = await ServerModel.find({minecraftServerName: serverName});
-		if (linkedServers) {
+
+		const serverStats = await ServerStatModel.findOne({minecraftServerName: serverName});
+
+		if (!serverStats) {
+			const statsCollection = new mongoose.Types.Map<number>();
+			statsCollection.set(advertiser, 1);
+			ServerStatModel.create({minecraftServerName: serverName, advertisementAmount: statsCollection})
+		}
+
+		else {
+			if (serverStats.advertisementAmount) {
+				const count = serverStats.advertisementAmount.get(advertiser) ?? 1;
+				serverStats.advertisementAmount.set(advertiser, count + 1);
+				serverStats.save();
+			}
+			else {
+				let updatedStats = new mongoose.Types.Map<number>();
+				updatedStats.set(advertiser, 1);
+				await serverStats.updateOne({advertisementAmount: updatedStats}).exec()
+			}
+		}
+
+		if (linkedServers.length >= 1) {
 			for (let server of linkedServers) {
-				const channel = this.client.channels.cache.get(server.channelID) as TextChannel;
-				channel.send(embed)
+				const channel = await this.client.channels.fetch(server.logChannelID) as TextChannel;
+				channel.send(`\`${adRank}|&|${advertiser}|&|${serverName}\``).catch(e => console.log(e));
+				if (server.notifyAdChannelID) {
+					if (server.notifyAdChannelID != 'none') {
+						const notifyAdChannel = this.client.channels.cache.get(server.notifyAdChannelID) as TextChannel;
+						const embed = new MessageEmbed()
+						.addField('**Rank:**', `${adRank}`, true)
+						.addField('**Advertiser:**', `${advertiser}`, true)
+						.addField('**Server Name:**', `${serverName}`, true)
+						.addField('Advertisement Message', `\`${adMessage}\``)
+						.setColor('#32CD32')
+						.setTimestamp()
+						.setAuthor(advertiser, `https://minotar.net/helm/${advertiser}.png)`);
+						notifyAdChannel.send(embed).catch(e => console.log(e));
+					}
+				}
 			}
 		}
 	}

@@ -1,10 +1,9 @@
 import { Message } from 'discord.js';
 import { inspect } from 'util';
-import { PrefixSupplier } from 'discord-akairo';
-import { TraccCommand } from '../../structure/command/traccCommand';
 import { MESSAGES } from '../../util/constants';
+import { Command } from 'discord-akairo';
 
-export default class EvalCommand extends TraccCommand {
+export default class EvalCommand extends Command {
 	constructor() {
 		super('eval', {
 			aliases: ['eval'],
@@ -31,7 +30,7 @@ export default class EvalCommand extends TraccCommand {
 			expression: string;
 		}
 	) {
-		const prefix = (this.handler.prefix as PrefixSupplier)(msg) as string;
+		const prefix = this.handler.prefix as string;
 
 		if (!expression)
 			return msg.channel.send(

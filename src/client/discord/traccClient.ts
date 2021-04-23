@@ -3,7 +3,6 @@ import { TraccClientOptions } from './traccClientOptions';
 import { Mongoose } from 'mongoose';
 import { Message } from 'discord.js';
 import { InhibitorHandler } from 'discord-akairo';
-import { guildConfigs } from '../../guild/config/guildConfigs';
 // import parseDuration from 'parse-duration';
 // import { CooldownManager } from '../structure/cooldownManager';
 import TraccClientEvents from './traccClientEvents';
@@ -12,9 +11,7 @@ import { MESSAGES } from '../../util/constants';
 import { CodeModel } from '../../model/code';
 import mineflayer from 'mineflayer';
 import { EventEmitter } from 'events';
-import { DocumentType } from '@typegoose/typegoose';
-import { Server } from '../../model/server';
-import { CacheManager } from '../../structure/cacheManager';
+import { ServerModel } from '../../model/server';
 
 
 export class TraccClient extends AkairoClient {
@@ -26,7 +23,7 @@ export class TraccClient extends AkairoClient {
 	mongo?: Mongoose;
 	mcBot?: mineflayer.Bot;
 
-	serverCacheManager: CacheManager<string, DocumentType<Server>>;
+	serverNameCache: string[];
 
 	constructor(options: TraccClientOptions) {
 		// TODO: validate options
@@ -46,11 +43,7 @@ export class TraccClient extends AkairoClient {
 
 		this.commandHandler = new CommandHandler(this, {
 			directory: './src/command/',
-			prefix: (msg: Message) => {
-				if (!msg.guild) return options.prefix!;
-				const config = guildConfigs.get(msg.guild.id);
-				return config ? config.prefix || options.prefix! : options.prefix!;
-			},
+			prefix: process.env.DISCORD_PREFIX,
 			argumentDefaults: {
 				prompt: {
 					modifyRetry: (_: any, str: any) =>
@@ -89,7 +82,7 @@ export class TraccClient extends AkairoClient {
 		this.commandHandler.loadAll();
 		// this.inhibitorHandler.loadAll();
 
-		this.serverCacheManager = new CacheManager(600000);
+		this.serverNameCache = []
 
 		this.registerArgTypes();
 	}
@@ -130,6 +123,17 @@ export class TraccClient extends AkairoClient {
 				return c;
 			}
 		);
+
+		this.commandHandler.resolver.addType(
+			'mhServer',
+			async (_msg: Message, phrase) => {
+				if (!phrase) return null;
+
+				const c = await ServerModel.findOne({minecraftServerName: phrase})
+				if (!c) return null;
+				return c;
+			}
+		)
 	}
 }
 
@@ -141,7 +145,7 @@ declare module 'discord-akairo' {
 		ownerIds: string[] | undefined;
 		mcBot?: mineflayer.Bot;
 
-		serverCacheManager: CacheManager<string, DocumentType<Server>>;
+		serverNameCache: string[];
 
 		start(token: string): void;
 		registerArgTypes(): void;

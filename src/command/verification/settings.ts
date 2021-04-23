@@ -1,11 +1,10 @@
-import { ArgumentOptions } from "discord-akairo";
-import { Flag } from "discord-akairo";
-import { TextChannel } from "discord.js";
-import { Message } from "discord.js";
-import { ServerModel } from "../../model/server";
-import { TraccCommand } from "../../structure/command/traccCommand";
+import { DocumentType } from "@typegoose/typegoose"
+import { Command } from "discord-akairo";
+import { Argument, Flag, ArgumentOptions  } from "discord-akairo";
+import { MessageEmbed, TextChannel, Message } from "discord.js";
+import { Server, ServerModel } from "../../model/server";
 
-export default class SettingsCommand extends TraccCommand {
+export default class SettingsCommand extends Command {
     constructor() {
 		super('settings', {
 			aliases: ['settings', 'setting'],
@@ -15,88 +14,93 @@ export default class SettingsCommand extends TraccCommand {
 			description: {
 				content: 'Changes ad-tracc settings for your server',
 			},
-            // args: [	
-            //     { 
-            //         id: 'setting',
-            //         type: ['server', 'channel'],
-            //         prompt: {
-			// 			start: (msg: Message) =>
-			// 				`${msg.author}, What setting do you want to change? (server, channel)`,
-			// 			retry: (msg: Message) =>
-			// 				`${msg.author}, please specify a valid setting! (server, channel)`,
-			// 		}
-            //     },
-            //     { 
-            //         id: 'value',
-			// 		type: 'string',
-			// 		prompt: {
-			// 			start: (msg: Message) => {
-            //                 let argMsg: string | undefined;
-            //                 if (msg.content.includes('server')) argMsg = 'server name'
-            //                 else if (msg.content.includes('channel')) argMsg = 'ad-tracc channel id'
-			// 				`${msg.author}, please enter the new ${argMsg ?? 'value'}.`
-			// 			},
-			// 			retry: (msg: Message) => `${msg.author}, Invalid argument! please try again!`,
-
-			// 		}
-            //     }
-            // ]
 		});
 	}
 
     *args(): IterableIterator<(ArgumentOptions|Flag)> {
-        const setting = yield { 
-            type: ['server', 'channel'], 
+		let prefix = this.handler.prefix;
+		let embed: MessageEmbed; 
+		const server = yield {
+			type: 'mhServer',
+			otherwise: async (msg: Message) => {
+				if (!msg.guild) return;
+				
+				const servers = await ServerModel.find({guildID: msg.guild.id});
+				if (servers.length >= 1) {
+					embed = new MessageEmbed()
+					.setTitle(`${msg.guild?.name} Settings`)
+					.setColor('#32CD32')
+					.setFooter(`Use ${prefix}settings <server name> <setting> <value/none> to modify`);
+					servers.forEach((server) => {
+						embed.addField('Server Name', server.minecraftServerName, false)
+						embed.addField('logchannel (Minecraft -> Discord -> Minecraft)', `<#${server.logChannelID}>`, true)
+						embed.addField('adchannel (embeded notifcations)', `${server.notifyAdChannelID ? `<#${server.notifyAdChannelID}>` : 'none'}`, true)
+					})
+				}
+
+				return embed ?? 'There are currently no linked servers';
+			}
+		}
+		const setting = yield { 
+            type: ['logchannel', 'adchannel'], 
             prompt: {
             start: (msg: Message) =>
-                `${msg.author}, What setting do you want to change? (server, channel)`,
+                `${msg.author}, What setting do you want to change? (logchannel, adchannel)`,
             retry: (msg: Message) =>
-                `${msg.author}, please specify a valid setting! (server, channel)`,
+                `${msg.author}, please specify a valid setting! (logchannel, adchannel)`,
         }};
-        let argType, argPromptMsg: string;
-        if (setting == 'channel') {
-            argType = 'textChannel'
-            argPromptMsg = 'Please enter a valid channel'
-        }
-
-        else { 
-            argType = 'string'
-            argPromptMsg = 'Please enter a minehut server name'
+        
+		let argPromptMsg: string;
+        if (setting == 'logchannel') {
+            argPromptMsg = 'Please enter a valid channel for logs'
+        } else if (setting == 'adchannel') {
+            argPromptMsg = 'Please enter a valid channel for advertisement notifications'
         }
 
         const value = yield { 
-            type: argType,
+            type: Argument.union('textChannel', 'none'),
             prompt: {
                 start: (msg: Message) => 
-                `${msg.author}, ${argPromptMsg}`,
+                `${msg.author}, ${argPromptMsg} or none to disable`,
                 retry: (msg: Message) => `${msg.author}, Invalid argument! please try again!`,
             }
             
         }
 
-        return { setting, value }
+        return { server, setting, value }
     }
 
 
-	async exec(msg: Message, { setting, value }: { setting: 'server' | 'channel', value: string | TextChannel}) {
+	async exec(msg: Message, { server, setting, value }: { server: DocumentType<Server>, setting: 'logchannel' | 'adchannel', value: TextChannel | 'none' }) {
 		if (!msg.guild) return;
+		if (!server) return;
         // await ServerModel.updateOne({guildID: msg.guild.id} , { stuff });
-		if (setting == 'server') {
-            if (typeof value === 'string') {
-				ServerModel.updateOne({guildID: msg.guild.id}, {
-					minecraftServerName: value
-				})
-				msg.reply(`✅ Successfully updated Server setting to \`${value}\``)
-			} else {
-				msg.reply(`❌ An error occurred: Server value must be a string`)
+		if (setting == 'logchannel') {
+			if (value instanceof TextChannel) {
+				await ServerModel.updateOne({minecraftServerName: server.minecraftServerName, guildID: msg.guild.id}, {
+					logChannelID: value.id
+				}).exec()
+				msg.reply(`✅ Successfully updated Log Channel setting to ${value}`)
+			}
+			else if (value === 'none') {
+				msg.reply(`❌ An error occurred: This cannot be disabled!`)
+			}
+			else {
+				msg.reply(`❌ An error occurred: Invalid Channel!`)
 			}
 		}
-		if (setting == 'channel') {
+		if (setting === 'adchannel') {
 			if (value instanceof TextChannel) {
-				ServerModel.updateOne({guildID: msg.guild.id}, {
-					channelID: value.id
-				})
-				msg.reply(`✅ Successfully updated Channel setting to \`${value}\``)
+				await ServerModel.updateOne({minecraftServerName: server.minecraftServerName, guildID: msg.guild.id}, {
+					notifyAdChannelID: value.id
+				}).exec()
+				msg.reply(`✅ Successfully updated Advertisement Notification Channel setting to ${value}`)
+			}
+			else if (value === 'none') {
+				await ServerModel.updateOne({minecraftServerName: server.minecraftServerName, guildID: msg.guild.id}, {
+					notifyAdChannelID: undefined
+				}).exec()
+				msg.reply(`✅ Successfully disabled advertisement notification embed`)
 			}
 			else {
 				msg.reply(`❌ An error occurred: Invalid Channel!`)

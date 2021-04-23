@@ -1,5 +1,3 @@
-import { PermissionLevel } from './permission/permissionLevel';
-
 export enum CaseType {
 	Kick = 'KICK',
 	VoiceKick = 'VOICEKICK',
@@ -26,16 +24,6 @@ export const MESSAGES = {
 			timeout: 'You took too long so the command has been cancelled.',
 			ended: 'Be prepared next time. The command has been cancelled.',
 			cancel: 'The command has been cancelled.',
-		},
-	},
-	events: {
-		commandHandler: {
-			missingPermissions: {
-				user: (required: PermissionLevel) =>
-					`:no_entry: you don't have the required permission level (${required})`,
-				client: (missing: string) =>
-					`${process.env.EMOJI_CROSS} bot is missing permission ${missing}`,
-			},
 		},
 	},
 	commands: {
