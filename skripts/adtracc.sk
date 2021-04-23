@@ -1,0 +1,190 @@
+#                                  #
+#       ADTRACC SKRIPT SETUP       #
+#                                  #
+
+#     REQUIREMENTS: Skript, SkQuery, and Vixio
+#     VERSION: 1.0.0
+
+options:
+# DISCORD BOT SETTINGS:
+    bot_name: <BOT NAME> # REPLACE WITH BOT NAME HERE 
+    bot_token: <BOT TOKEN> # REPLACE WITH BOT TOKEN HERE 
+    tracc_channel: <CHANNEL ID> # REPLACE WITH CHANNEL ID HERE 
+
+    bot_status: <BOT STATUS> # REPLACE WITH BOT STATUS IF VALUE ABOVE IS TRUE
+    bot_status_enabled: true # TRUE/FALSE - TOGGLES BOT STATUS
+
+# SERVER SETTINGS:
+    server_prefix: <SERVER PREFIX> # REPLACE WITH SERVER PREFIX FOR MESSAGES HERE
+
+    server_color_primary: &6 # REPLACE WITH PRIMARY SERVER COLOR CODE
+    server_color_secondary: &7 # REPLACE WITH SECONDARY SERVER COLOR CODE
+
+    server_sound_enabled: true #TRUE/FALSE - PLAY A SOUND WHEN ADVERTISING
+    admin_perms: <PERMISSION NODE> # REPLACE WITH YOUR PERMISSION NODE
+
+# DISCORD BOT LOGIN
+on skript load:
+    login to "{@bot_token}" with the name "{@bot_name}"
+    set {data::adtracc::message_toggle} to true if {data::adtracc::message_toggle} is not set
+    set {data::adtracc::disable} to false if {data::adtracc::disable} is not set
+
+# MARKS BOT STATUS
+on join:
+    mark "{@bot_name}" as playing "{@bot_status}" if {@bot_status_enabled} is true
+
+# AD TRACKER
+
+on guild message received:
+    {data::adtracc::disable} is true
+    discord id of event-channel is "{@tracc_channel}"
+    set {_ad} to event-message
+    replace all "`" in {_ad} with ""
+    set {_split_ad::*} to split {_ad} at "|&|"
+    set {_player} to {_split_ad::3}
+    set {_rank} to ("%{_split_ad::2}%") if {_split_ad::1} != "undefined" else ("Default")
+    send "{@server_prefix} {@server_color_primary}%{_player}% {@server_color_secondary} advertised the server and was rewarded! &7(%{data::adtracc::%{_u}%} ? 0% &7Ads)" to all players if {data::adtracc::toggle} is true
+    play sound "entity.villager.levelup" at pitch 2 to all players if {@server_sound_enabled} is true
+    adReward({_player}, {_rank})
+
+function adReward(p: player, rank: string):
+    set {_u} to uuid of {_p}
+    add 1 to {data::adtracc::%{_u}%}
+
+    # ALWAYS RUNS
+
+    # give {_p} cookie named "Thanks for advertising!"
+
+    {_rank} is "Default":
+
+        # RUNS IF PLAYER IS DEFAULT
+        add 1 to {data::adtracc::count-default}
+        
+    else if {_rank} = "[VIP]":
+
+        # RUNS IF PLAYER IS VIP
+        add 1 to {data::adtracc::count-vip}
+
+    else if {_rank} = "[PRO]":
+
+        # RUNS IF PLAYER IS PRO
+        add 1 to {data::adtracc::count-pro}
+
+    else if {_rank} = "[LEGEND]":
+
+        # RUNS IF PLAYER IS LEGEND
+        add 1 to {data::adtracc::count-legend}
+
+    else if {_rank} = "[PATRON]":
+
+        # RUNS IF PLAYER IS PATRON
+        add 1 to {data::adtracc::count-patron}
+
+    else if {_rank} = "[ARTIST]":
+
+        # RUNS IF PLAYER IS ARTIST
+        add 1 to {data::adtracc::count-artist}
+
+    else if {_rank} = "[BUILDER]":
+
+        # RUNS IF PLAYER IS BUILDER
+        add 1 to {data::adtracc::count-builder}
+
+    else if {_rank} = "[YOUTUBE]":
+
+        # RUNS IF PLAYER IS YOUTUBER
+        add 1 to {data::adtracc::count-youtube}
+
+    else if {_rank} = "[HELPER]":
+
+        # RUNS IF PLAYER IS HELPER
+        add 1 to {data::adtracc::count-helper}
+
+    else if {_rank} = "[MOD]":
+
+        # RUNS IF PLAYER IS MOD
+        add 1 to {data::adtracc::count-mod}
+
+    else if {_rank} = "[SRMOD]":
+
+        # RUNS IF PLAYER IS SRMOD
+        add 1 to {data::adtracc::count-srmod}
+
+    else if {_rank} = "[ADMIN]":
+
+        # RUNS IF PLAYER IS ADMIN
+        add 1 to {data::adtracc::count-admin}
+
+# IN-GAME COMMANDS
+
+command /adtracc [<string>]:
+    trigger:
+        arg-1 is not set:
+            send "{@server_prefix} {@server_color_secondary}/adtracc help" to player
+            play sound "entity.villager.no" to player
+        else:
+            arg-1 is "help":
+                player has permission "{@admin_perms}":
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                    send "" to player
+                    send centered "&6&lADTRACC &7v1.0.0" to player
+                    send "" to player
+                    send " &f/adtracc stats - &7&oDisplays statistics for advertisements%nl% &f/adtracc toggle - &7&oToggles the broadcasts for advertisements%nl% &f/adtracc disable - &7&oTemporarily disable adtracc features%nl% &f/adtracc help - &7&oDisplays a list of commands for adtracc" to player
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                else:
+                    send "&6&lUSAGE: &e/adtracc top" to player
+                    play sound "entity.villager.no" to player
+            arg-1 is "stats": 
+                send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                send "%nl% &7Default &8» &e%{data::adtracc::count-default}% %nl% &aVIP &8» &e%{data::adtracc::count-vip}% %nl% &bPRO &8» &e%{data::adtracc::count-pro}% %nl% &6LEGEND &8» &e%{data::adtracc::count-legend}% %nl% &3PATRON &8» &e%{data::adtracc::count-patron}% %nl% &dARTIST &8» &e%{data::adtracc::count-artist}% %nl% &dBUILDER &8» &e%{data::adtracc::count-builder}% %nl% &dYOUTUBE &8» &e%{data::adtracc::count-youtube}% %nl% &9HELPER &8» &e%{data::adtracc::count-helper}% %nl% &eMOD &8» &e%{data::adtracc::count-mod}% %nl% &6SRMOD &8» &e%{data::adtracc::count-srmod}% %nl% &cADMIN &8» &e%{data::adtracc::count-admin}% %nl%" to player
+                send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+            arg-1 is "toggle":
+                player has permission "{@admin_perms}":
+                    {data::adtracc:message_toggle} is true:
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        send centered "&6&lDISABLED MESSAGES" to player
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        set {data::adtracc::message_toggle} to false
+                        play sound "block.lever.click" to player
+                    else if {data::adtracc:message_toggle} is false:
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        send centered "&6&lENABLED MESSAGES" to player
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        set {data::adtracc::message_toggle} to true
+                        play sound "block.lever.click" to player
+                else:
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                    send centered "&6&lNO PERMISSIONS" to player
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                    play sound "entity.villager.no" to player
+            arg-1 is "disable":
+                player has permission "{@admin_perms}":
+                    {data::adtracc:disable} is true:
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        send centered "&6&lDISABLED ADTRACC" to player
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        set {data::adtracc::disable} to false
+                        play sound "block.lever.click" to player
+                    else if {data::adtracc::disable} is false:
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        send centered "&6&lENABLED ADTRACC" to player
+                        send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                        set {data::adtracc::disable} to true
+                        play sound "block.lever.click" to player
+                else:
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                    send centered "&6&lNO PERMISSIONS" to player
+                    send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                    play sound "entity.villager.no" to player
+            arg-1 is "top":
+                send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
+                send "&8« &e&lTop 10 Advertisements&8 »" to player
+                set {_sAdtop::*} to sorted {data::adtracc::*} from highest to lowest with format "@index"
+                set {_ind} to 0
+                loop {_sAdtop::*}:
+                    if {_ind} < 10:
+                        add 1 to {_ind}
+                        set {_pl} to "%loop-value parsed as offline player%"
+                        set {_adcount} to {data::adtracc::%loop-value%}
+                        send  "&e##%{_ind}% &7%{_pl}% &8» &6%{_adcount}% &7advertisements" to player
+                send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
