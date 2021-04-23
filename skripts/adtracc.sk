@@ -90,6 +90,11 @@ function adReward(p: player, rank: string):
         # RUNS IF PLAYER IS BUILDER
         add 1 to {data::adtracc::count-builder}
 
+    else if {_rank} = "[YOUTUBE]":
+
+        # RUNS IF PLAYER IS YOUTUBER
+        add 1 to {data::adtracc::count-youtube}
+
     else if {_rank} = "[HELPER]":
 
         # RUNS IF PLAYER IS HELPER
@@ -133,7 +138,7 @@ command /adtracc [<string>] [<string>]:
                             play sound "entity.villager.no" to player
                     arg-1 is "stats": 
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
-                        send "%nl% &7Default &8» &e%{data::adtracc::count-default}% %nl% &aVIP &8» &e%{data::adtracc::count-vip}% %nl% &bPRO &8» &e%{data::adtracc::count-pro}% %nl% &6LEGEND &8» &e%{data::adtracc::count-legend}% %nl% &3PATRON &8» &e%{data::adtracc::count-patron}% %nl% &dARTIST &8» &e%{data::adtracc::count-artist}% %nl% &dBUILDER &8» &e%{data::adtracc::count-builder}% %nl% &9HELPER &8» &e%{data::adtracc::count-helper}% %nl% &eMOD &8» &e%{data::adtracc::count-mod}% %nl% &6SRMOD &8» &e%{data::adtracc::count-srmod}% %nl% &cADMIN &8» &e%{data::adtracc::count-admin}% %nl%" to player
+                        send "%nl% &7Default &8» &e%{data::adtracc::count-default}% %nl% &aVIP &8» &e%{data::adtracc::count-vip}% %nl% &bPRO &8» &e%{data::adtracc::count-pro}% %nl% &6LEGEND &8» &e%{data::adtracc::count-legend}% %nl% &3PATRON &8» &e%{data::adtracc::count-patron}% %nl% &dARTIST &8» &e%{data::adtracc::count-artist}% %nl% &dBUILDER &8» &e%{data::adtracc::count-builder}% %nl% &dYOUTUBE &8» &e%{data::adtracc::count-youtube}% %nl% &9HELPER &8» &e%{data::adtracc::count-helper}% %nl% &eMOD &8» &e%{data::adtracc::count-mod}% %nl% &6SRMOD &8» &e%{data::adtracc::count-srmod}% %nl% &cADMIN &8» &e%{data::adtracc::count-admin}% %nl%" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     arg-1 is "toggle":
                         {_p} has permission "{@admin_perms}":
