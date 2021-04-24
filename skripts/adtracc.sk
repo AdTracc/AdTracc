@@ -32,6 +32,8 @@ on skript load:
 # MARKS BOT STATUS
 on join:
     mark "{@bot_name}" as playing "{@bot_status}" if {@bot_status_enabled} is true
+    {adReward_claimed::%uuid of player%} is set:
+        adReward(player, {adtracc_rank::%uuid of player%})
 
 # AD TRACKER
 
@@ -45,11 +47,14 @@ on guild message received:
     set {_rank} to ("%{_split_ad::2}%") if {_split_ad::1} != "undefined" else ("Default")
     send "{@server_prefix} {@server_color_primary}%{_player}% {@server_color_secondary} advertised the server and was rewarded! &7(%{data::adtracc::%{_u}%} ? 0% &7Ads)" to all players if {data::adtracc::toggle} is true
     play sound "entity.villager.levelup" at pitch 2 to all players if {@server_sound_enabled} is true
+    set {adtracc_rank::%{_u}%} to {_rank}
+    set {adReward_claimed::%uuid of player%} to true
     adReward({_player}, {_rank})
 
 function adReward(p: player, rank: string):
     set {_u} to uuid of {_p}
     add 1 to {adCount::%{_u}%}
+    delete {adReward_claimed::%{_u}%}
 
     # ALWAYS RUNS
 
