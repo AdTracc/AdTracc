@@ -1,7 +1,7 @@
+import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { TraccCommand } from '../../structure/command/traccCommand';
 
-export default class ErrorCommand extends TraccCommand {
+export default class ErrorCommand extends Command {
 	constructor() {
 		super('error', {
 			aliases: ['error'],

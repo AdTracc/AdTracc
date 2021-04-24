@@ -9,7 +9,10 @@ export class Server {
     guildID!: string;
 
     @prop({required: true})
-    channelID!: string;
+    logChannelID!: string;
+
+    @prop({required: false})
+    notifyAdChannelID!: string;
 
 }
 

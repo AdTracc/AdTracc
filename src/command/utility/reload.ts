@@ -4,18 +4,16 @@ import {
 	CommandHandler,
 	ListenerHandler,
 } from 'discord-akairo';
-import { PrefixSupplier } from 'discord-akairo';
-import { TraccCommand } from '../../structure/command/traccCommand';
-import { PermissionLevel } from '../../util/permission/permissionLevel';
 import { MESSAGES } from '../../util/constants';
+import { Command } from 'discord-akairo';
 
-export default class ReloadCommand extends TraccCommand {
+export default class ReloadCommand extends Command {
 	constructor() {
 		super('reload', {
 			aliases: ['reload'],
 			category: 'utility',
 			channel: 'guild',
-			permissionLevel: PermissionLevel.BotDeveloper,
+			ownerOnly: true,
 			description: {
 				content: 'Reload a module',
 				usage: '<handler> <moduleid>',
@@ -44,7 +42,7 @@ export default class ReloadCommand extends TraccCommand {
 			module: string;
 		}
 	) {
-		const prefix = (this.handler.prefix as PrefixSupplier)(msg) as string;
+		const prefix = (this.handler.prefix) as string;
 		try {
 			if (!handler || !module)
 				return msg.channel.send(

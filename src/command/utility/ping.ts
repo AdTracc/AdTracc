@@ -1,7 +1,7 @@
+import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { TraccCommand } from '../../structure/command/traccCommand';
 
-export default class PingCommand extends TraccCommand {
+export default class PingCommand extends Command {
 	constructor() {
 		super('ping', {
 			aliases: ['ping'],

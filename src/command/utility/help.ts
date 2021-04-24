@@ -1,10 +1,8 @@
-import { TraccCommand } from '../../structure/command/traccCommand';
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
-import { PrefixSupplier } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
 
-export default class HelpCommand extends TraccCommand {
+export default class HelpCommand extends Command {
 	constructor() {
 		super('help', {
 			aliases: ['help'],
@@ -25,7 +23,7 @@ export default class HelpCommand extends TraccCommand {
 	}
 
 	async exec(msg: Message, { command }: { command: Command }) {
-		const prefix = (this.handler.prefix as PrefixSupplier)(msg) as string;
+		const prefix = this.handler.prefix as string;
 		if (!command) {
 			const embed = new MessageEmbed()
 				.setColor('BLUE')

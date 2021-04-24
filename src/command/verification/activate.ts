@@ -1,9 +1,10 @@
 import { DocumentType } from "@typegoose/typegoose";
+import { Command } from "discord-akairo";
+import { TextChannel } from "discord.js";
 import { Message } from "discord.js";
 import { Code } from "../../model/code";
-import { TraccCommand } from "../../structure/command/traccCommand";
 
-export default class ActivateCommand extends TraccCommand {
+export default class ActivateCommand extends Command {
     constructor() {
 		super('activate', {
 			aliases: ['activate', 'redeem'],
@@ -45,7 +46,8 @@ export default class ActivateCommand extends TraccCommand {
 
 		
 		msg.channel.send(`Ad-Tracc has been enabled for ${msg.guild.name}`);
-		this.client.guilds.cache.get(process.env.ACTIVATION_CHANNEL!)
+		const activationLog = this.client.channels.cache.get(process.env.ACTIVATION_CHANNEL!) as TextChannel;
+		activationLog.send(`${msg.author} used code ${code} to activate ${msg.guild.name} (${msg.guild.id})`)
 		
 	}
 }

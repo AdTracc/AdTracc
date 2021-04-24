@@ -9,6 +9,7 @@ export default class MinecraftClient {
     version: string;
     auth: "microsoft" | "mojang" | undefined;
     client?: mineflayer.Bot;
+    options: MinecraftClientOptions;
 
     constructor(options: MinecraftClientOptions) {
         this.host = options.host;
@@ -17,6 +18,8 @@ export default class MinecraftClient {
         this.version = options.version;
         this.auth = options.auth;
         this.client;
+        this.options = options;
+        if (this.client) this.client.options = this.options;
     }
 
     
@@ -45,10 +48,16 @@ export default class MinecraftClient {
             auth: this.auth
         })
 
-        this.client.addChatPattern('ad', /^\[AD\]( \[.+\])* (\S+): \/join ([^\s]*) (.+)/, {repeat: true, parse: true})
-
+        this.client.addChatPattern('ad', /^\[AD\] *(\[.+\])* (\S+): \/join ([^\s]*) (.+)/, {repeat: true, parse: true})
 		// bind events
         // this.registerEvents();
     }
 
+}
+
+
+declare module 'mineflayer' {
+    interface Bot {
+        options: MinecraftClientOptions;
+    }
 }
