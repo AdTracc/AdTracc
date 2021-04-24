@@ -12,11 +12,11 @@ export default class MinecraftEndListener extends Listener {
 	async exec() {
 		setTimeout(() => { 
 			this.client.mcBot = mineflayer.createBot({
-			host: this.client.mcBot?.options.host,
-			username: this.client.mcBot?.options.username!,
-			password: this.client.mcBot?.options.password,
-			version: this.client.mcBot?.options.version,
-			auth: this.client.mcBot?.options.auth
+			host: this.client.mcBot?.customOptions.host,
+			username: this.client.mcBot?.customOptions.username!,
+			password: this.client.mcBot?.customOptions.password,
+			version: this.client.mcBot?.customOptions.version,
+			auth: this.client.mcBot?.customOptions.auth
 		})
 		this.client.mcBot.addChatPattern('ad', /^\[AD\] *(\[.+\])* (\S+): \/join ([^\s]*) (.+)/, {repeat: true, parse: true})
 	}, 30000)

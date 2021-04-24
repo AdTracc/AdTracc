@@ -51,6 +51,10 @@ export default class SetupCommand extends Command {
                     {
                         id: msg.guild.roles.everyone,
                         deny: ['VIEW_CHANNEL']
+                    },
+                    { 
+                        id: this.client.user!.id,
+                        allow: ['VIEW_CHANNEL']
                     }
                 ]
             })

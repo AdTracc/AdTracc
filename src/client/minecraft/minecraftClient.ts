@@ -19,7 +19,7 @@ export default class MinecraftClient {
         this.auth = options.auth;
         this.client;
         this.options = options;
-        if (this.client) this.client.options = this.options;
+        if (this.client) this.client.customOptions = this.options;
     }
 
     
@@ -49,6 +49,7 @@ export default class MinecraftClient {
         })
 
         this.client.addChatPattern('ad', /^\[AD\] *(\[.+\])* (\S+): \/join ([^\s]*) (.+)/, {repeat: true, parse: true})
+        this.client.customOptions = this.options;
 		// bind events
         // this.registerEvents();
     }
@@ -58,6 +59,6 @@ export default class MinecraftClient {
 
 declare module 'mineflayer' {
     interface Bot {
-        options: MinecraftClientOptions;
+        customOptions: MinecraftClientOptions;
     }
 }
