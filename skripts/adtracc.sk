@@ -24,7 +24,7 @@ options:
     admin_perms: <PERMISSION NODE> # REPLACE WITH YOUR PERMISSION NODE
 
 # DISCORD BOT LOGIN
-on skript load:
+on load:
     login to "{@bot_token}" with the name "{@bot_name}"
     set {data::adtracc::message_toggle} to false if {data::adtracc::message_toggle} is not set
     set {data::adtracc::disable} to false if {data::adtracc::disable} is not set
@@ -40,7 +40,7 @@ on join:
 on guild message received:
     {data::adtracc::disable} is false
     discord id of event-channel is "{@tracc_channel}"
-    set {_ad} to event-message
+    set {_ad} to "%event-message%"
     replace all "`" in {_ad} with ""
     set {_split_ad::*} to split {_ad} at "|&|"
     set {_player} to {_split_ad::2} parsed as offline player
