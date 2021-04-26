@@ -37,7 +37,7 @@ export default class SetupCommand extends Command {
 
         if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.')
         
-        if (await ServerModel.exists({minecraftServerName: serverName, guildID: msg.guild.id})) return msg.channel.send('This server is already linked, use the settings command to modify the setup');
+        if (await ServerModel.exists({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id})) return msg.channel.send('This server is already linked, use the settings command to modify the setup');
 
         let newChannel: TextChannel;
         const currentServerModel = await ServerModel.findOne({guildID: msg.guild.id});
@@ -67,9 +67,9 @@ export default class SetupCommand extends Command {
         let guilds = codeInfo.guilds;
         guilds.push(msg.guild.id);
         await codeInfo.updateOne({guilds: guilds}).exec();
-        this.client.serverNameCache.push(serverName);
+        this.client.serverNameCache.push(serverName.toLowerCase());
 
-        await ServerModel.create({minecraftServerName: serverName, guildID: msg.guild.id, logChannelID: newChannel.id});
+        await ServerModel.create({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id, logChannelID: newChannel.id});
 
         msg.channel.send(`Setup channel ${newChannel} for ${serverName}`);
 	}

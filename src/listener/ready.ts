@@ -14,8 +14,9 @@ export default class ReadyListener extends Listener {
 
 		const servers = await ServerModel.find();
 
-		servers.map(server => {
-			this.client.serverNameCache.push(server.minecraftServerName)
+		servers.forEach(server => {
+			const name = server.minecraftServerName.toLowerCase();
+			this.client.serverNameCache.push(name);
 		})
 	}
 }

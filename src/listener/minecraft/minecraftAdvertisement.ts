@@ -16,7 +16,7 @@ export default class MinecraftAdvertisementListener extends Listener {
 		const channel = await this.client.channels.fetch('829551447774724166') as TextChannel; //#miunehut-chat in bot category
         const adRank = ad[0][0] || 'Default'
 		const advertiser = ad[0][1]
-		const serverName = ad[0][2]
+		const serverName = ad[0][2].toLowerCase();
 		const adMessage = ad[0][3]
 
         const embed = new MessageEmbed()
@@ -29,17 +29,17 @@ export default class MinecraftAdvertisementListener extends Listener {
         .setAuthor(this.client.user?.username, this.client.user?.displayAvatarURL());
 
 		channel.send(embed).catch(e => console.log(e));
+		const name = serverName.toLowerCase();
+		if (!this.client.serverNameCache.includes(name)) return;
 
-		if (!this.client.serverNameCache.includes(serverName)) return;
+		const linkedServers = await ServerModel.find({minecraftServerName: serverName.toLowerCase()});
 
-		const linkedServers = await ServerModel.find({minecraftServerName: serverName});
-
-		const serverStats = await ServerStatModel.findOne({minecraftServerName: serverName});
+		const serverStats = await ServerStatModel.findOne({minecraftServerName: serverName.toLowerCase()});
 
 		if (!serverStats) {
 			const statsCollection = new mongoose.Types.Map<number>();
 			statsCollection.set(advertiser, 1);
-			ServerStatModel.create({minecraftServerName: serverName, advertisementAmount: statsCollection})
+			ServerStatModel.create({minecraftServerName: serverName.toLowerCase(), advertisementAmount: statsCollection})
 		}
 
 		else {

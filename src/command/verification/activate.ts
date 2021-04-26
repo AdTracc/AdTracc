@@ -47,7 +47,7 @@ export default class ActivateCommand extends Command {
 		
 		msg.channel.send(`Ad-Tracc has been enabled for ${msg.guild.name}`);
 		const activationLog = this.client.channels.cache.get(process.env.ACTIVATION_CHANNEL!) as TextChannel;
-		activationLog.send(`${msg.author} used code ${code.id} to activate ${msg.guild.name} (${msg.guild.id})`)
+		activationLog.send(`${msg.author} used code ${code._id} to activate ${msg.guild.name} (${msg.guild.id})`)
 		
 	}
 }

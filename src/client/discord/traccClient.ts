@@ -12,6 +12,7 @@ import { CodeModel } from '../../model/code';
 import mineflayer from 'mineflayer';
 import { EventEmitter } from 'events';
 import { ServerModel } from '../../model/server';
+import { CooldownManager } from '../../structure/cooldownManager';
 
 
 export class TraccClient extends AkairoClient {
@@ -22,6 +23,8 @@ export class TraccClient extends AkairoClient {
 	ownerIds: string[] | undefined;
 	mongo?: Mongoose;
 	mcBot?: mineflayer.Bot;
+
+	tagCooldownManager: CooldownManager;
 
 	serverNameCache: string[];
 
@@ -82,7 +85,9 @@ export class TraccClient extends AkairoClient {
 		this.commandHandler.loadAll();
 		// this.inhibitorHandler.loadAll();
 
-		this.serverNameCache = []
+		this.serverNameCache = [];
+
+		this.tagCooldownManager = new CooldownManager(10000);
 
 		this.registerArgTypes();
 	}
@@ -129,7 +134,7 @@ export class TraccClient extends AkairoClient {
 			async (_msg: Message, phrase) => {
 				if (!phrase) return null;
 
-				const c = await ServerModel.findOne({minecraftServerName: phrase})
+				const c = await ServerModel.findOne({minecraftServerName: phrase.toLowerCase()})
 				if (!c) return null;
 				return c;
 			}
@@ -144,6 +149,8 @@ declare module 'discord-akairo' {
 		inhibitorHandler: InhibitorHandler;
 		ownerIds: string[] | undefined;
 		mcBot?: mineflayer.Bot;
+
+		tagCooldownManager: CooldownManager;
 
 		serverNameCache: string[];
 

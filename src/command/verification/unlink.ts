@@ -35,9 +35,9 @@ export default class SetupCommand extends Command {
 
         if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.')
         
-        if (!await ServerModel.exists({minecraftServerName: serverName, guildID: msg.guild.id})) return msg.channel.send('This server is not linked');
+        if (!await ServerModel.exists({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id})) return msg.channel.send('This server is not linked');
 
-        await ServerModel.deleteOne({minecraftServerName: serverName, guildID: msg.guild.id}).exec();
+        await ServerModel.deleteOne({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id}).exec();
         msg.channel.send(`Unlinked server ${serverName}`);
 
 
