@@ -58,16 +58,16 @@ export default class TagSetCommand extends Command {
 		const conflictingTag = await TagModel.findByAlias(tag.name);
 		if (conflictingTag)
 			return msg.channel.send(
-				`${process.env.EMOJI_CROSS} tag name conflicts with \`${conflictingTag.name}\`'s aliases (use ${prefix}tag info ${conflictingTag.name})`
+				`Tag name conflicts with \`${conflictingTag.name}\`'s aliases (use ${prefix}tag info ${conflictingTag.name})`
 			);
 		if (!(await TagModel.exists({ name }))) {
 			TagModel.create(tag);
 			return msg.channel.send(
-				`${process.env.EMOJI_CHECK} tag \`${tag.name}\` created`
+				`Tag \`${tag.name}\` created`
 			);
 		} else await TagModel.updateOne({ name }, tag);
 		return msg.channel.send(
-			`${process.env.EMOJI_CHECK} tag \`${tag.name}\` updated`
+			`Tag \`${tag.name}\` updated`
 		);
 	}
 }

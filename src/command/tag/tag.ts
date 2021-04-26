@@ -24,18 +24,6 @@ export default class TagCommand extends Command {
 				• **setsection** \`<name> <section>\`
 				`,
 				usage: '<method> <...arguments>',
-				examples: [
-					'show meta',
-					'set informative minehut :point_right: If you want a great server host, use minehut.com',
-					'setalias mh minehut',
-					'deletealias mh',
-					'info minehut',
-					'info mh',
-					'source timings',
-					'rename minehut memehut',
-					'delete memehut',
-					'setsection minehut useful',
-				],
 			},
 			category: 'tag',
 			channel: 'guild',

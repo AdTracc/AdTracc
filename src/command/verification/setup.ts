@@ -35,7 +35,12 @@ export default class SetupCommand extends Command {
         const codeInfo = await CodeModel.findOne({owner: msg.author.id});
         if (!codeInfo) return msg.channel.send(`You do not have access to use this command.`);
 
-        if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.')
+        if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.');
+
+        if (codeInfo.limit) {
+            if (codeInfo.guilds.length >= codeInfo.limit) return msg.channel.send('You have reached your max limit for this code, create a ticket to increase your limit.');
+        }
+        
         
         if (await ServerModel.exists({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id})) return msg.channel.send('This server is already linked, use the settings command to modify the setup');
 

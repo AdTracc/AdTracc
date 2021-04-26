@@ -10,6 +10,9 @@ export class Code {
     @prop({required: false, type: String})
     guilds!: string[]
 
+    @prop({required: true})
+    limit!: number;
+
 }
 
 export const CodeModel = getModelForClass(Code);

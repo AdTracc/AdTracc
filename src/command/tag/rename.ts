@@ -47,17 +47,17 @@ export default class TagRenameCommand extends Command {
 		const tag = await TagModel.findByNameOrAlias(oldName);
 		if (!tag)
 			return msg.channel.send(
-				`${process.env.EMOJI_CROSS} tag \`${oldName}\` does not exist, check \`${prefix}tags\``
+				`Tag \`${oldName}\` does not exist, check \`${prefix}tags\``
 			);
 		oldName = tag.name;
 		const tagWithNewName = await TagModel.findByNameOrAlias(newName);
 		if (tagWithNewName)
 			return msg.channel.send(
-				`${process.env.EMOJI_CROSS} a tag with the new name/alias already exists`
+				`A tag with the new name/alias already exists`
 			);
 		await tag.updateOne({ name: newName });
 		msg.channel.send(
-			`${process.env.EMOJI_CHECK} tag \`${tag.name}\` is now \`${newName}\``
+			`Tag \`${tag.name}\` is now \`${newName}\``
 		);
 	}
 }

@@ -28,13 +28,15 @@ export default class TagShowCommand extends Command {
 	}
 
 	async exec(msg: Message, { name }: { name: string }) {
+		if (!msg.guild) return;
+		if (msg.guild.id != process.env.MAIN_SERVER_ID) return;
 		name = name.replace(/\s+/g, '-').toLowerCase();
 		const prefix = (this.handler.prefix) as string;
 		// Find tag with that name or alias
 		const tag = await TagModel.findByNameOrAlias(name);
 		if (!tag)
 			return msg.channel.send(
-				`${process.env.EMOJI_CROSS} tag \`${name}\` does not exist, check \`${prefix}tags\``
+				`Tag \`${name}\` does not exist, check \`${prefix}tags\``
 			);
 		if (
 			this.client.tagCooldownManager.isOnCooldown(

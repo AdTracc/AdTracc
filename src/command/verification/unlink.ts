@@ -37,6 +37,9 @@ export default class SetupCommand extends Command {
         
         if (!await ServerModel.exists({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id})) return msg.channel.send('This server is not linked');
 
+        let guilds = codeInfo.guilds;
+        guilds.splice(codeInfo.guilds.indexOf(msg.guild.id));
+        await codeInfo.updateOne({guilds: guilds}).exec();
         await ServerModel.deleteOne({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id}).exec();
         msg.channel.send(`Unlinked server ${serverName}`);
 

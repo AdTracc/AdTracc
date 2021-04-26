@@ -1,6 +1,5 @@
 import { Message } from 'discord.js';
 import { TagModel } from '../../model/tag';
-import { PrefixSupplier } from 'discord-akairo';
 import { Command } from 'discord-akairo';
 
 export default class TagSourceCommand extends Command {
@@ -27,13 +26,13 @@ export default class TagSourceCommand extends Command {
 
 	async exec(msg: Message, { name }: { name: string }) {
 		name = name.replace(/\s+/g, '-').toLowerCase();
-		const prefix = (this.handler.prefix as PrefixSupplier)(msg) as string;
+		const prefix = (this.handler.prefix) as string;
 
 		// Find tag with that name or alias
 		const tag = await TagModel.findByNameOrAlias(name);
 		if (!tag)
 			return msg.channel.send(
-				`${process.env.EMOJI_CROSS} tag \`${name}\` does not exist, check \`${prefix}tags\``
+				`Tag \`${name}\` does not exist, check \`${prefix}tags\``
 			);
 
 		msg.channel.send(tag.content, { code: true });

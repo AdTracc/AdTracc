@@ -24,12 +24,22 @@ export default class GenerateCommand extends Command {
 						retry: (msg: Message) =>
 							`${msg.author}, please specify a valid user.`,
 					},
+				},
+				{
+					id: 'limit',
+					type: 'integer',
+					prompt: {
+						start: (msg: Message) =>
+							`${msg.author}, How many times can this code be used?`,
+						retry: (msg: Message) =>
+							`${msg.author}, please specify a valid integer.`,
+					},
 				}
 			]
 		});
 	}
 
-	async exec(msg: Message, { customer }: { customer: User }) {
+	async exec(msg: Message, { customer, limit }: { customer: User, limit: number }) {
 		let generatedCode = randomAlphanumericString(5);
 		if (await CodeModel.exists({_id: generatedCode})) {
 			while (await CodeModel.exists({_id: generatedCode})) {
@@ -41,6 +51,7 @@ export default class GenerateCommand extends Command {
 		await CodeModel.create({
 			_id: generatedCode,
 			owner: customer.id,
+			limit: limit
 		});
 		const activationLog = this.client.channels.cache.get('830202847177342987') as TextChannel;
 		activationLog.send(`Generated new code for **${customer.tag}** | **Code:** ${generatedCode}`);
