@@ -132,7 +132,7 @@ command /adtracc [<string>]:
                 player has permission "{@admin_perms}":
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     send "" to player
-                    send centered "&6&lADTRACC &7v1.0.0" to player
+                    send "&6&lADTRACC &7v1.0.0" to player
                     send "" to player
                     send " &f/adtracc stats - &7&oDisplays statistics for advertisements%nl% &f/adtracc toggle - &7&oToggles the broadcasts for advertisements%nl% &f/adtracc disable - &7&oTemporarily disable adtracc features%nl% &f/adtracc help - &7&oDisplays a list of commands for adtracc" to player
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
@@ -148,21 +148,21 @@ command /adtracc [<string>]:
                     {data::adtracc::message_toggle} is true:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send "" to player
-                        send centered "&6&lDISABLED MESSAGES" to player
+                        send "&6&lDISABLED MESSAGES" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         set {data::adtracc::message_toggle} to false
                         play sound "block.lever.click" to player
                     else if {data::adtracc::message_toggle} is false:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send "" to player
-                        send centered "&6&lENABLED MESSAGES" to player
+                        send "&6&lENABLED MESSAGES" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         set {data::adtracc::message_toggle} to true
                         play sound "block.lever.click" to player
                 else:
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     send "" to player
-                    send centered "&6&lNO PERMISSIONS" to player
+                    send "&6&lNO PERMISSIONS" to player
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     play sound "entity.villager.no" to player
             arg-1 is "disable":
@@ -170,21 +170,21 @@ command /adtracc [<string>]:
                     {data::adtracc::disable} is true:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send "" to player
-                        send centered "&6&lDISABLED ADTRACC" to player
+                        send "&6&lDISABLED ADTRACC" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         set {data::adtracc::disable} to false
                         play sound "block.lever.click" to player
                     else if {data::adtracc::disable} is false:
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         send "" to player
-                        send centered "&6&lENABLED ADTRACC" to player
+                        send "&6&lENABLED ADTRACC" to player
                         send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                         set {data::adtracc::disable} to true
                         play sound "block.lever.click" to player
                 else:
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     send "" to player
-                    send centered "&6&lNO PERMISSIONS" to player
+                    send "&6&lNO PERMISSIONS" to player
                     send "%nl%&8&m--------------------------&6&l[✘]&8&m--------------------------" to player
                     play sound "entity.villager.no" to player
             arg-1 is "top":
