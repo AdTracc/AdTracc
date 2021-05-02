@@ -38,7 +38,7 @@ on join:
 # AD TRACKER
 
 on guild message received:
-    {data::adtracc::disable} is false
+    {data::adtracc::disable} is true
     discord id of event-channel is "{@tracc_channel}"
     set {_ad} to "%event-message%"
     replace all "`" in {_ad} with ""
