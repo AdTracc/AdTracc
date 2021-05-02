@@ -145,19 +145,19 @@ command /adtracc [<string>]:
                 send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
             arg-1 is "toggle":
                 player has permission "{@admin_perms}":
-                    {data::adtracc::message_toggle} is true:
+                    {data::adtracc::message_toggle} is false:
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
                         send "" to player
                         send "&6&lDISABLED MESSAGES" to player
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
-                        set {data::adtracc::message_toggle} to false
+                        set {data::adtracc::message_toggle} to true
                         play sound "block.lever.click" to player
-                    else if {data::adtracc::message_toggle} is false:
+                    else if {data::adtracc::message_toggle} is true:
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
                         send "" to player
                         send "&6&lENABLED MESSAGES" to player
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
-                        set {data::adtracc::message_toggle} to true
+                        set {data::adtracc::message_toggle} to false
                         play sound "block.lever.click" to player
                 else:
                     send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
@@ -167,19 +167,19 @@ command /adtracc [<string>]:
                     play sound "entity.villager.no" to player
             arg-1 is "disable":
                 player has permission "{@admin_perms}":
-                    {data::adtracc::disable} is true:
+                    {data::adtracc::disable} is false:
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
                         send "" to player
                         send "&6&lDISABLED ADTRACC" to player
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
-                        set {data::adtracc::disable} to false
+                        set {data::adtracc::disable} to true
                         play sound "block.lever.click" to player
-                    else if {data::adtracc::disable} is false:
+                    else if {data::adtracc::disable} is true:
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
                         send "" to player
                         send "&6&lENABLED ADTRACC" to player
                         send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
-                        set {data::adtracc::disable} to true
+                        set {data::adtracc::disable} to false
                         play sound "block.lever.click" to player
                 else:
                     send "%nl%&8&m------------------------&6&l[✘]&8&m------------------------" to player
