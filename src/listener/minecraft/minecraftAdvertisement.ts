@@ -13,8 +13,10 @@ export default class MinecraftAdvertisementListener extends Listener {
 	}
 
 	async exec(ad: RegExpMatchArray) {
-		const channel = await this.client.channels.fetch('829551447774724166') as TextChannel; //#miunehut-chat in bot category
-        const adRank = ad[0][0] || 'Default'
+		//#miunehut-chat in bot category
+		const channel = await this.client.channels.fetch('829551447774724166') as TextChannel;
+        
+		const adRank = ad[0][0] || 'Default'
 		const advertiser = ad[0][1]
 		const serverName = ad[0][2].toLowerCase();
 		const adMessage = ad[0][3]
@@ -58,7 +60,7 @@ export default class MinecraftAdvertisementListener extends Listener {
 		if (linkedServers.length >= 1) {
 			for (let server of linkedServers) {
 				const channel = await this.client.channels.fetch(server.logChannelID) as TextChannel;
-				channel.send(`\`${adRank}|&|${advertiser}|&|${serverName}\``).catch(e => console.log(e));
+				channel.send(`\`${adRank}|&|${advertiser}|&|${serverName}|&|${adMessage}\``).catch(e => console.log(e));
 				if (server.notifyAdChannelID) {
 					if (server.notifyAdChannelID != 'none') {
 						const notifyAdChannel = this.client.channels.cache.get(server.notifyAdChannelID) as TextChannel;

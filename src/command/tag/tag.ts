@@ -2,9 +2,10 @@ import { Flag } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { MESSAGES } from '../../util/constants';
 import { ArgumentOptions } from 'discord-akairo';
-import { Command } from 'discord-akairo';
+import { TraccCommand } from '../../structure/command/traccCommand';
+import { PermissionLevel } from '../../util/permission/permissionLevel';
 
-export default class TagCommand extends Command {
+export default class TagCommand extends TraccCommand {
 	constructor() {
 		super('tag', {
 			aliases: ['tag'],
@@ -27,6 +28,7 @@ export default class TagCommand extends Command {
 			},
 			category: 'tag',
 			channel: 'guild',
+			permissionLevel: PermissionLevel.Support
 		});
 	}
 

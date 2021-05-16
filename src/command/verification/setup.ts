@@ -35,10 +35,13 @@ export default class SetupCommand extends Command {
         const codeInfo = await CodeModel.findOne({owner: msg.author.id});
         if (!codeInfo) return msg.channel.send(`You do not have access to use this command.`);
 
-        if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.');
-
-        if (codeInfo.limit) {
-            if (codeInfo.guilds.length >= codeInfo.limit) return msg.channel.send('You have reached your max limit for this code, create a ticket to increase your limit.');
+        // if (codeInfo.owner != msg.author.id) return msg.channel.send('You cannot use this code.');
+        
+        if (codeInfo.limit != undefined) {
+            const currentGuildAmount = (codeInfo.servers.length ?? 0);
+            if (currentGuildAmount >= codeInfo.limit)  {
+                return msg.channel.send('You have reached your max limit for this code, create a ticket to increase your limit.');
+            }
         }
         
         
@@ -69,12 +72,13 @@ export default class SetupCommand extends Command {
         }
         
 
-        let guilds = codeInfo.guilds;
-        guilds.push(msg.guild.id);
-        await codeInfo.updateOne({guilds: guilds}).exec();
+        let servers = codeInfo.servers;
+        if (!servers) servers = [];
+        servers.push(serverName);
+        await codeInfo.updateOne({servers: servers}).exec();
         this.client.serverNameCache.push(serverName.toLowerCase());
 
-        await ServerModel.create({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id, logChannelID: newChannel.id});
+        await ServerModel.create({minecraftServerName: serverName.toLowerCase(), guildID: msg.guild.id, logChannelID: newChannel.id, activated: true});
 
         msg.channel.send(`Setup channel ${newChannel} for ${serverName}`);
 	}

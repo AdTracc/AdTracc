@@ -14,6 +14,9 @@ export class Server {
     @prop({required: false})
     notifyAdChannelID!: string;
 
+    @prop({required: true})
+    activated!: boolean;
+
 }
 
 export const ServerModel = getModelForClass(Server);

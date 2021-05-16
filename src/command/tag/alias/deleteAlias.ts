@@ -1,11 +1,12 @@
-import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
 import { TagModel } from '../../../model/tag';
+import { TraccCommand } from '../../../structure/command/traccCommand';
+import { PermissionLevel } from '../../../util/permission/permissionLevel';
 
-export default class TagSetAliasCommand extends Command {
+export default class TagSetAliasCommand extends TraccCommand {
 	constructor() {
 		super('tag-deletealias', {
-			ownerOnly: true,
+			permissionLevel: PermissionLevel.Support,
 			category: 'tag',
 			channel: 'guild',
 			description: {

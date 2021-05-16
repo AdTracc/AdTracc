@@ -1,12 +1,14 @@
 import { Message } from 'discord.js';
 import { TagModel } from '../../model/tag';
-import { Command } from 'discord-akairo';
+import { TraccCommand } from '../../structure/command/traccCommand';
+import { PermissionLevel } from '../../util/permission/permissionLevel';
 
-export default class TagSourceCommand extends Command {
+export default class TagSourceCommand extends TraccCommand {
 	constructor() {
 		super('tag-source', {
 			category: 'tag',
 			channel: 'guild',
+			permissionLevel: PermissionLevel.Support,
 			description: {
 				content: 'Get tag source',
 				usage: '<name/alias>',

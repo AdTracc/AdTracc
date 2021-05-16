@@ -29,7 +29,7 @@ export default class HelpCommand extends Command {
 				.setColor('BLUE')
 				.setTitle('Commands')
 				.setDescription(
-					`This is a list of available Minehut bot commands\nFor more information about a command, use **\`${prefix}help <command>\`**`
+					`This is a list of available bot commands\nFor more information about a command, use **\`${prefix}help <command>\`**`
 				);
 
 			for (const category of this.handler.categories.values()) {

@@ -9,6 +9,7 @@ export default class ActivateCommand extends Command {
 		super('activate', {
 			aliases: ['activate', 'redeem'],
 			category: 'verification',
+			userPermissions: 'MANAGE_GUILD',
 			description: {
 				content: 'Activates Ad-Tracc from a unique code',
 			},
@@ -31,9 +32,7 @@ export default class ActivateCommand extends Command {
 		if (!msg.guild) return;
 		if (code.owner != msg.author.id) return;
 		
-		if (code.guilds.includes(msg.guild.id)) {
-			msg.channel.send(`${msg.guild.name} already has Ad-Tracc enabled!`);
-		}
+		if (code.guilds.includes(msg.guild.id)) return msg.channel.send(`${msg.guild.name} already has Ad-Tracc enabled!`);
 
 		let guilds = code.guilds;
 		guilds.push(msg.guild.id);

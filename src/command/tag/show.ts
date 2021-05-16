@@ -3,12 +3,14 @@ import { TagModel } from '../../model/tag';
 import { truncate } from 'lodash';
 import { MessageEmbed } from 'discord.js';
 import { IMGUR_LINK_REGEX } from '../../util/constants';
-import { Command } from 'discord-akairo';
+import { TraccCommand } from '../../structure/command/traccCommand';
+import { PermissionLevel } from '../../util/permission/permissionLevel';
 
-export default class TagShowCommand extends Command {
+export default class TagShowCommand extends TraccCommand {
 	constructor() {
 		super('tag-show', {
 			category: 'tag',
+			permissionLevel: PermissionLevel.Support,
 			channel: 'guild',
 			description: {
 				content: 'Show specific tag',

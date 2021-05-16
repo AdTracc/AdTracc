@@ -1,11 +1,12 @@
 import { Message } from 'discord.js';
 import { TagModel, Tag } from '../../model/tag';
-import { Command } from 'discord-akairo';
+import { TraccCommand } from '../../structure/command/traccCommand';
+import { PermissionLevel } from '../../util/permission/permissionLevel';
 
-export default class TagSetCommand extends Command {
+export default class TagSetCommand extends TraccCommand {
 	constructor() {
 		super('tag-set', {
-			ownerOnly: true,
+			permissionLevel: PermissionLevel.Support,
 			category: 'tag',
 			channel: 'guild',
 			description: {

@@ -3,17 +3,18 @@ import { TagModel } from '../../../model/tag';
 import { MessageEmbed } from 'discord.js';
 import { truncate, chunk } from 'lodash';
 import { editMessageWithPaginatedEmbeds } from 'discord.js-pagination-ts';
-import { Command } from 'discord-akairo';
+import { PermissionLevel } from '../../../util/permission/permissionLevel';
+import { TraccCommand } from '../../../structure/command/traccCommand';
 
 interface TagAlias {
 	name: string;
 	alias: string;
 }
 
-export default class TagListAliasesCommand extends Command {
+export default class TagListAliasesCommand extends TraccCommand {
 	constructor() {
 		super('tag-listaliases', {
-			ownerOnly: true,
+			permissionLevel: PermissionLevel.Support,
 			category: 'tag',
 			channel: 'guild',
 			description: {

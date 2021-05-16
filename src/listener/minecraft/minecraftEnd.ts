@@ -1,4 +1,5 @@
 import { Listener } from 'discord-akairo';
+import { TextChannel } from 'discord.js';
 import mineflayer from 'mineflayer';
 
 export default class MinecraftEndListener extends Listener {
@@ -10,7 +11,9 @@ export default class MinecraftEndListener extends Listener {
 	}
 
 	async exec() {
-		setTimeout(() => { 
+		setTimeout(async () => {
+			const channel = await this.client.channels.fetch(process.env.MINECRAFT_LOG_ID!) as TextChannel;
+			channel.send(`Ad-Tracc Account has lost connection or gone offline, attempting to reconnect...`);
 			this.client.mcBot = mineflayer.createBot({
 			host: this.client.mcBot?.customOptions.host,
 			username: this.client.mcBot?.customOptions.username!,
