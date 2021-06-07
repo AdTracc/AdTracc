@@ -8,7 +8,7 @@ export function getPermissionLevel(user: User, client: TraccClient) {
 	if (client.ownerIds?.includes(user.id)) return PermissionLevel.BotDeveloper;
 	const mainGuild = client.guilds.cache.get(process.env.MAIN_SERVER_ID!);
 	// All role types
-	const allRoles: string[] = Object.keys(RoleType);
+	const allRoles: string[] = Object.values(RoleType);
 	
 	const member = mainGuild?.members.cache.get(user.id);
 	// If a member isn't in the main guild then they have no permissions.
@@ -21,7 +21,7 @@ export function getPermissionLevel(user: User, client: TraccClient) {
 
 	const highestRole = roles.sort((a, b) => a.position - b.position).last();
 	if (!highestRole) return PermissionLevel.Everyone;
-	if (!mainGuild?.roles.cache.has(highestRole.name))
+	if (!mainGuild?.roles.cache.some(role => role.name === highestRole.name))
 		throw new Error('role permission level is not defined');
 
 	return permissionLevelFromRole(highestRole.name);
