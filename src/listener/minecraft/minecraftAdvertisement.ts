@@ -14,7 +14,7 @@ export default class MinecraftAdvertisementListener extends Listener {
 
 	async exec(ad: RegExpMatchArray) {
 		//#miunehut-chat in bot category
-		const channel = await this.client.channels.fetch('829551447774724166') as TextChannel;
+		const channel = await this.client.channels.fetch(process.env.PUBLIC_LOG!) as TextChannel;
         
 		const adRank = ad[0][0] || 'Default'
 		const advertiser = ad[0][1]
