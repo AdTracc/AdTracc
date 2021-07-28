@@ -53,7 +53,7 @@ export default class GenerateCommand extends Command {
 			owner: customer.id,
 			limit: limit
 		});
-		const activationLog = this.client.channels.cache.get('830202847177342987') as TextChannel;
+		const activationLog = this.client.channels.cache.get(process.env.ACTIVATION_CHANNEL!) as TextChannel;
 		activationLog.send(`Generated new code for **${customer.tag}** | **Code:** ${generatedCode}`);
 		return msg.channel.send(`Generated new code for **${customer.tag}** | **Code:** ${generatedCode}`);
 	}

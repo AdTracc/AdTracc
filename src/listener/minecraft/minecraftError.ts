@@ -11,7 +11,7 @@ export default class MinecraftErrorListener extends Listener {
 
 	async exec(err: Error) {
 		const channel = await this.client.channels.fetch(process.env.MINECRAFT_LOG_ID!) as TextChannel;
+		console.log(`Minecraft Bot error occurred: ${err}`)
 		channel.send(`Ad-Tracc Account errored: ${err}`);
-        console.log(`Minecraft Bot error occurred: ${err}`)
     }
 }

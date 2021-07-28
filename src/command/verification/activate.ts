@@ -34,6 +34,7 @@ export default class ActivateCommand extends Command {
 		
 		if (code.guilds.includes(msg.guild.id)) return msg.channel.send(`${msg.guild.name} already has Ad-Tracc enabled!`);
 
+		let codeID = code.id;
 		let guilds = code.guilds;
 		guilds.push(msg.guild.id);
 		code = await code.updateOne({
@@ -46,7 +47,7 @@ export default class ActivateCommand extends Command {
 		
 		msg.channel.send(`Ad-Tracc has been enabled for ${msg.guild.name}`);
 		const activationLog = this.client.channels.cache.get(process.env.ACTIVATION_CHANNEL!) as TextChannel;
-		activationLog.send(`${msg.author} used code ${code._id} to activate ${msg.guild.name} (${msg.guild.id})`)
+		activationLog.send(`${msg.author} used code ${codeID} to activate ${msg.guild.name} (${msg.guild.id})`)
 		
 	}
 }
