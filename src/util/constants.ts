@@ -12,7 +12,7 @@ export const MESSAGES = {
 	},
 	commands: {
 		useHelp: (prefix: string, commandName: string) =>
-			`${process.env.EMOJI_AHH} I can help you more if you use \`${prefix}help ${commandName}\``,
+			`I can help you more if you use \`${prefix}help ${commandName}\``,
 	},
 };
 
