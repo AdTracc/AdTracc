@@ -30,7 +30,8 @@ export default class MinecraftAdvertisementListener extends Listener {
         .setTimestamp()
         .setAuthor(this.client.user?.username, this.client.user?.displayAvatarURL());
 
-		if(process.env.PUBLIC_LOG_TOGGLE?.toLocaleLowerCase() == 'true'){
+		const logToggle = process.env.PUBLIC_LOG_TOGGLE?.toLocaleLowerCase() || 'false';
+		if (logToggle == 'true'){
 			channel.send(embed).catch(e => console.log(e));
 		}
 
