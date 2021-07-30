@@ -75,7 +75,7 @@ export default class MinecraftAdvertisementListener extends Listener {
 						.setColor('#32CD32')
 						.setTimestamp()
 						.setAuthor(advertiser, `https://minotar.net/helm/${advertiser}.png)`);
-						notifyAdChannel.send(embed).catch(e => console.log(e));
+						if (notifyAdChannel) notifyAdChannel.send(embed).catch(e => console.log(e));
 					}
 				}
 			}
