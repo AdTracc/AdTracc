@@ -30,7 +30,10 @@ export default class MinecraftAdvertisementListener extends Listener {
         .setTimestamp()
         .setAuthor(this.client.user?.username, this.client.user?.displayAvatarURL());
 
-		channel.send(embed).catch(e => console.log(e));
+		if(process.env.PUBLIC_LOG_TOGGLE?.toLocaleLowerCase() == 'true'){
+			channel.send(embed).catch(e => console.log(e));
+		}
+
 		const name = serverName.toLowerCase();
 		if (!this.client.serverNameCache.includes(name)) return;
 
