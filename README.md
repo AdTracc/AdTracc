@@ -1,9 +1,8 @@
 # Running the bot
 
-This project uses yarn.
-
 Please note, we **will not** provide official support for self hosting this bot. It was never intented to be used for a single server and was built for our specific purpose.
 
+(This project uses yarn)
 1. Install Node.js (https://nodejs.org/en/)
 2. Download and Extract the source code from this page into a folder.
 3. Open up cmd within the folder where you extracted the source into.
