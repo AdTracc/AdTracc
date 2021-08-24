@@ -1,3 +1,5 @@
+**AD TRACKING IS OFFICIALLY AGAINST MINEHUT'S RULES, DO NOT USE, THIS REPOSITORY WILL NO LONGER BE MAINTAINED**
+
 # Running the bot
 
 Please note, we **will not** provide official support for self hosting this bot. It was never intented to be used for a single server and was built for our specific purpose.
